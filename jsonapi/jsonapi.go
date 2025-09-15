@@ -2,9 +2,11 @@ package jsonapi
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"io"
 	"log"
+	"mailinglist-ms/maildb"
 	"net/http"
 )
 
@@ -55,4 +57,40 @@ func returnErr(writer http.ResponseWriter, err error, code int){
 		writer.WriteHeader(code)
 		return errorMessage,nil
 	})	
+}
+
+
+
+func CreateEmail(db *sql.DB) http.Handler{
+	return http.HandlerFunc(func(writer http.ResponseWriter,req *http.Request){
+		if req.Method != "POST" {
+			return 
+		}
+
+		entry := maildb.EmailEntry{}
+		FromJson(req.Body,&entry)
+
+
+		if err := maildb.CreateEmail(db,entry.Email); err != nil {
+			returnErr(writer,err,400)
+			return 
+		}
+
+
+
+		returnJson(writer ,func()(any, error){
+			log.Printf("Json CreateEmail: %v\n", entry.Email)
+			return maildb.GetEmail(db,entry.Email)
+		})
+
+	})
+}
+
+
+func Server(db *sql.DB, bind string){
+	http.Handle("/email/create",CreateEmail(db))
+	http.Handle("/email/get",GetEmail(db))
+	http.Handle("/email/get_batch",GetEmailBatch(db))
+	http.Handle("/email/update",UpdateEmail(db))
+	http.Handle("/email/delete",DeleteEmail(db))
 }
