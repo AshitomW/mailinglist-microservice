@@ -87,6 +87,24 @@ func CreateEmail(db *sql.DB) http.Handler{
 }
 
 
+func GetEmail(db *sql.DB) http.Handler{
+	return http.HandlerFunc(func(writer http.ResponseWriter,req *http.Request){
+		if req.Method != "GET" {
+			return 
+		}
+
+		entry := maildb.EmailEntry{}
+		FromJson(req.Body,&entry)
+		returnJson(writer ,func()(any, error){
+			log.Printf("Json GetEmail: %v\n", entry.Email)
+			return maildb.GetEmail(db,entry.Email)
+		})
+
+	})
+}
+
+
+
 func Server(db *sql.DB, bind string){
 	http.Handle("/email/create",CreateEmail(db))
 	http.Handle("/email/get",GetEmail(db))
