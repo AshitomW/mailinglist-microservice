@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"mailinglist-ms/maildb"
@@ -103,6 +104,81 @@ func GetEmail(db *sql.DB) http.Handler{
 	})
 }
 
+func UpdateEmail(db *sql.DB) http.Handler{
+	return http.HandlerFunc(func(writer http.ResponseWriter,req *http.Request){
+		if req.Method != "PUT" {
+			return 
+		}
+
+		entry := maildb.EmailEntry{}
+		FromJson(req.Body,&entry)
+
+
+		if err := maildb.UpdateEmail(db,entry); err != nil {
+			returnErr(writer,err,400)
+			return 
+		}
+
+
+
+		returnJson(writer ,func()(any, error){
+			log.Printf("Json UpdateEmail: %v\n", entry.Email)
+			return maildb.GetEmail(db,entry.Email)
+		})
+
+	})
+}
+
+func DeleteEmail(db *sql.DB) http.Handler{
+	return http.HandlerFunc(func(writer http.ResponseWriter,req *http.Request){
+		if req.Method != "POST" {
+			return 
+		}
+
+		entry := maildb.EmailEntry{}
+		FromJson(req.Body,&entry)
+
+
+		if err := maildb.DeleteEmail(db,entry.Email); err != nil {
+			returnErr(writer,err,400)
+			return 
+		}
+
+
+
+		returnJson(writer ,func()(any, error){
+			log.Printf("Json DeleteEmail: %v\n", entry.Email)
+			return maildb.GetEmail(db,entry.Email)
+		})
+
+	})
+}
+
+func GetEmailBatch(db *sql.DB) http.Handler{
+	return http.HandlerFunc(func(writer http.ResponseWriter,req *http.Request){
+		if req.Method != "GET" {
+			return 
+		}
+		
+		queryOptions := maildb.GetEmailBatchQueryParameters{}
+		FromJson(req.Body, &queryOptions)
+
+		if queryOptions.Count <=0 || queryOptions.Page <=0 {
+			returnErr(writer,errors.New("Page and count fields are required and must be greater than 0"),400)
+			return 
+		}
+
+
+
+
+		returnJson(writer, func()(any,error){
+			log.Printf("JSOn GetEmailBatch: %v\n ",queryOptions)
+			return maildb.GetEmailBatch(db,queryOptions)
+		})
+
+
+	})
+}
 
 
 func Server(db *sql.DB, bind string){
@@ -111,4 +187,10 @@ func Server(db *sql.DB, bind string){
 	http.Handle("/email/get_batch",GetEmailBatch(db))
 	http.Handle("/email/update",UpdateEmail(db))
 	http.Handle("/email/delete",DeleteEmail(db))
+
+
+	err := http.ListenAndServe(bind,nil)
+	if err != nil {
+		log.Fatalf("JSON server error :%v",err)
+	}
 }
