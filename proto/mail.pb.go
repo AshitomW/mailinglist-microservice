@@ -179,7 +179,7 @@ func (x *GetEmailRequest) GetEmailAddr() string {
 
 type UpdateEmailRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	EmailEntry    string                 `protobuf:"bytes,1,opt,name=email_entry,json=emailEntry,proto3" json:"email_entry,omitempty"`
+	EmailEntry    *EmailEntry            `protobuf:"bytes,1,opt,name=email_entry,json=emailEntry,proto3" json:"email_entry,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -214,11 +214,11 @@ func (*UpdateEmailRequest) Descriptor() ([]byte, []int) {
 	return file_proto_mail_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *UpdateEmailRequest) GetEmailEntry() string {
+func (x *UpdateEmailRequest) GetEmailEntry() *EmailEntry {
 	if x != nil {
 		return x.EmailEntry
 	}
-	return ""
+	return nil
 }
 
 type DeleteEmailRequest struct {
@@ -421,9 +421,9 @@ const file_proto_mail_proto_rawDesc = "" +
 	"email_addr\x18\x01 \x01(\tR\temailAddr\"0\n" +
 	"\x0fGetEmailRequest\x12\x1d\n" +
 	"\n" +
-	"email_addr\x18\x01 \x01(\tR\temailAddr\"5\n" +
-	"\x12UpdateEmailRequest\x12\x1f\n" +
-	"\vemail_entry\x18\x01 \x01(\tR\n" +
+	"email_addr\x18\x01 \x01(\tR\temailAddr\"H\n" +
+	"\x12UpdateEmailRequest\x122\n" +
+	"\vemail_entry\x18\x01 \x01(\v2\x11.proto.EmailEntryR\n" +
 	"emailEntry\"3\n" +
 	"\x12DeleteEmailRequest\x12\x1d\n" +
 	"\n" +
@@ -468,23 +468,24 @@ var file_proto_mail_proto_goTypes = []any{
 	(*GetEmailBatchResponse)(nil), // 7: proto.GetEmailBatchResponse
 }
 var file_proto_mail_proto_depIdxs = []int32{
-	0, // 0: proto.EmailResponse.email_entry:type_name -> proto.EmailEntry
-	0, // 1: proto.GetEmailBatchResponse.email_entries:type_name -> proto.EmailEntry
-	1, // 2: proto.MailingListService.CreateEmail:input_type -> proto.CreateEmailRequest
-	2, // 3: proto.MailingListService.GetEmail:input_type -> proto.GetEmailRequest
-	3, // 4: proto.MailingListService.UpdateEmail:input_type -> proto.UpdateEmailRequest
-	4, // 5: proto.MailingListService.DeleteEmail:input_type -> proto.DeleteEmailRequest
-	5, // 6: proto.MailingListService.GetEmailBatch:input_type -> proto.GetEmailBatchRequest
-	6, // 7: proto.MailingListService.CreateEmail:output_type -> proto.EmailResponse
-	6, // 8: proto.MailingListService.GetEmail:output_type -> proto.EmailResponse
-	6, // 9: proto.MailingListService.UpdateEmail:output_type -> proto.EmailResponse
-	6, // 10: proto.MailingListService.DeleteEmail:output_type -> proto.EmailResponse
-	7, // 11: proto.MailingListService.GetEmailBatch:output_type -> proto.GetEmailBatchResponse
-	7, // [7:12] is the sub-list for method output_type
-	2, // [2:7] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: proto.UpdateEmailRequest.email_entry:type_name -> proto.EmailEntry
+	0, // 1: proto.EmailResponse.email_entry:type_name -> proto.EmailEntry
+	0, // 2: proto.GetEmailBatchResponse.email_entries:type_name -> proto.EmailEntry
+	1, // 3: proto.MailingListService.CreateEmail:input_type -> proto.CreateEmailRequest
+	2, // 4: proto.MailingListService.GetEmail:input_type -> proto.GetEmailRequest
+	3, // 5: proto.MailingListService.UpdateEmail:input_type -> proto.UpdateEmailRequest
+	4, // 6: proto.MailingListService.DeleteEmail:input_type -> proto.DeleteEmailRequest
+	5, // 7: proto.MailingListService.GetEmailBatch:input_type -> proto.GetEmailBatchRequest
+	6, // 8: proto.MailingListService.CreateEmail:output_type -> proto.EmailResponse
+	6, // 9: proto.MailingListService.GetEmail:output_type -> proto.EmailResponse
+	6, // 10: proto.MailingListService.UpdateEmail:output_type -> proto.EmailResponse
+	6, // 11: proto.MailingListService.DeleteEmail:output_type -> proto.EmailResponse
+	7, // 12: proto.MailingListService.GetEmailBatch:output_type -> proto.GetEmailBatchResponse
+	8, // [8:13] is the sub-list for method output_type
+	3, // [3:8] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_mail_proto_init() }
