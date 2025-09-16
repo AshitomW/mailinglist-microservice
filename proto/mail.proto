@@ -35,7 +35,7 @@ message GetEmailBatchResponse {repeated EmailEntry email_entries =1;}
 service MailingListService {
   rpc CreateEmail(CreateEmailRequest) returns (EmailResponse){}
   rpc GetEmail(GetEmailRequest) returns (EmailResponse){}
-  rpc UpdateEmail(UpdatEmailRequest) returns (EmailResponse){}
+  rpc UpdateEmail(UpdateEmailRequest) returns (EmailResponse){}
   rpc DeleteEmail(DeleteEmailRequest) returns (EmailResponse){}
   rpc GetEmailBatch(GetEmailBatchRequest) returns (GetEmailBatchResponse){}
 }
