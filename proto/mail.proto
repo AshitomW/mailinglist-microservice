@@ -16,7 +16,7 @@ message EmailEntry{
 
 message CreateEmailRequest { string email_addr = 1;}
 message GetEmailRequest {string email_addr =1;}
-message UpdateEmailRequest {string email_entry =1;}
+message UpdateEmailRequest {EmailEntry email_entry =1;}
 message DeleteEmailRequest {string email_addr=1;}
 message GetEmailBatchRequest {
   int32 page = 1;
